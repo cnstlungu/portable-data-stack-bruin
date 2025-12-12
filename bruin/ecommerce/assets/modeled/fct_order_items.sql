@@ -3,7 +3,6 @@ name: fct_order_items
 type: duckdb.sql
 materialization:
    type: table
-   strategy: merge
 depends:
    - raw.order_items
 
