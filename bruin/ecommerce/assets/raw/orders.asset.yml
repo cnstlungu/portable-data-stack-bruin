@@ -1,0 +1,18 @@
+name: raw.orders
+type: ingestr
+parameters:
+  destination: duckdb
+  source_connection: oltp
+  source_table: public.orders
+  incremental_strategy: merge
+
+columns:
+  - name: id
+    type: varchar
+    primary_key: true
+  - name: customer_id
+    type: varchar
+  - name: status
+    type: varchar
+  - name: total_amount
+    type: decimal

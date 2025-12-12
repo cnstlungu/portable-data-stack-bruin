@@ -1,0 +1,9 @@
+**/logs/runs
+**/logs/*.log
+.bruin.yml
+.venv/
+__pycache__/
+*.duckdb
+logs/runs
+logs/*.log
+.env

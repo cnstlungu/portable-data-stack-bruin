@@ -1,0 +1,22 @@
+name: raw.order_items
+type: ingestr
+parameters:
+  destination: duckdb
+  source_connection: oltp
+  source_table: public.order_items
+  incremental_strategy: merge
+
+columns:
+  - name: id
+    type: varchar
+    primary_key: true
+  - name: order_id
+    type: varchar
+  - name: product_id
+    type: varchar
+  - name: quantity
+    type: bigint
+  - name: price_at_purchase
+    type: decimal
+  - name: total_item_amount
+    type: decimal

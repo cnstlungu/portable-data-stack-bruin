@@ -1,0 +1,5 @@
+name: load-ecommerce-data
+
+default_connections:
+  duckdb: olap
+  postgres: oltp
