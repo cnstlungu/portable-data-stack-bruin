@@ -6,7 +6,7 @@ This application is a containerized Analytics suite for an imaginary e-commerce 
 
 - Bruin
 - Superset
-- PosgreSQL
+- PostgreSQL
 - DuckDB
 - Docker (Docker Compose)
 - Python
@@ -43,7 +43,7 @@ OLAP (Data Warehouse)
 
     `docker compose up --build`
 
-    Note that this may take several minutes to completed. Check out the console to see the progress.
+    Note that this may take several minutes to complete. Check out the console to see the progress.
 
 4. When the assets have been materialized, you can open the [Superset interface](http://localhost:8088). Open the dashboard to see the charts.
 

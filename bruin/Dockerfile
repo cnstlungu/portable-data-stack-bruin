@@ -1,6 +1,6 @@
 FROM python:3.11
 
-RUN apt-get update && apt-get install -y git curl wget gettext-base
+RUN apt-get update && apt-get install -y git curl wget gettext-base && rm -rf /var/lib/apt/lists/*
 
 RUN curl -LsSf https://getbruin.com/install/cli | sh
 
