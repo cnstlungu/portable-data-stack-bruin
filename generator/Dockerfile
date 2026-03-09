@@ -1,12 +1,6 @@
-FROM python:3.11
+FROM python:3.11-slim
 
-RUN apt-get update && apt-get install -y wget
-
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-
-ENV POSTGRES_USER=$POSTGRES_USER
-ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 COPY generator .
 
