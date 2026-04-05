@@ -13,6 +13,8 @@ This application is a containerized Analytics suite for an imaginary e-commerce 
 
 ## Data Model
 
+A Dataform implementation of the postcard company analytics model is available in the [postcard-company-dataform](https://github.com/cnstlungu/postcard-company-dataform) project.
+
 OLTP (input data)
 
 ![OLTP](resources/oltp_erd.png "OLTP")
