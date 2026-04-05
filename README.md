@@ -13,8 +13,6 @@ This application is a containerized Analytics suite for an imaginary e-commerce 
 
 ## Data Model
 
-A Dataform implementation of the postcard company analytics model is available in the [postcard-company-dataform](https://github.com/cnstlungu/postcard-company-dataform) project.
-
 OLTP (input data)
 
 ![OLTP](resources/oltp_erd.png "OLTP")
@@ -30,6 +28,7 @@ OLAP (Data Warehouse)
 - [portable-data-stack-mage](https://github.com/cnstlungu/portable-data-stack-mage)
 - [portable-data-stack-airflow](https://github.com/cnstlungu/portable-data-stack-airflow)
 - [portable-data-stack-sqlmesh](https://github.com/cnstlungu/portable-data-stack-sqlmesh)
+- [postcard-company-dataform](https://github.com/cnstlungu/postcard-company-dataform)
 
 
 ### System requirements
