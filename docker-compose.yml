@@ -35,7 +35,10 @@ services:
       dockerfile: ./bruin/Dockerfile
     volumes:
       - ./shared:/shared
-      - ./bruin:/bruin
+      # Mount only the pipeline, not the whole bruin directory. The entrypoint
+      # runs `git init` and writes .bruin.yml in /bruin; with the parent mounted
+      # both landed in the user's checkout. Pipeline files stay live-editable.
+      - ./bruin/ecommerce:/bruin/ecommerce
     environment:
       DUCKDB_FILE_PATH: /shared/db/datamart.duckdb
       POSTGRES_HOST: oltp
