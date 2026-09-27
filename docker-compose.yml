@@ -26,6 +26,10 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PORT: 5432
+      # Both have defaults inside the generator. Set them in .env to pin a
+      # dataset: SEED alone is not enough, because the window ends at "now".
+      SEED: ${SEED:-42}
+      DATA_END_DATE: ${DATA_END_DATE:-}
     depends_on:
       oltp:
         condition: service_healthy

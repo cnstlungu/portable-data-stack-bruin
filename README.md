@@ -60,6 +60,24 @@ OLAP (Data Warehouse)
 
 
 
+### Generated data
+
+The OLTP database is filled by `generator/generate.py` before bruin runs. It is
+seeded, so the same settings produce the same dataset:
+
+| Variable | Default | Effect |
+|---|---|---|
+| `SEED` | `42` | Seeds both `random` and `Faker`, which between them drive every value - including the row ids. |
+| `DATA_END_DATE` | now | Last moment the window reaches. Customers and products are created in the year before it, orders within it. |
+
+`SEED` on its own does not make a run repeatable **across days**, because the
+window ends at the current time and therefore moves. To reproduce a dataset
+exactly, pin both:
+
+```bash
+SEED=42 DATA_END_DATE=2026-09-27 docker compose up --build
+```
+
 ### Demo Credentials
 
 Demo credentials are set in the .env file mentioned above. 

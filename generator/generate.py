@@ -9,14 +9,28 @@
 import argparse
 import os
 import random
-import uuid
 from datetime import datetime, timedelta
 import psycopg2
 from psycopg2.extras import execute_values
 from faker import Faker
 
-# Initialize Faker
+# Seed both generators so a run can be repeated. SEED matches the variable the
+# sibling postcard-company generators use, and defaults the same way.
+#
+# Row ids come from Faker's uuid4 rather than the uuid module's, for the same
+# reason: the standard-library one draws from os.urandom and ignores any seed,
+# which would leave every key different on each run with everything else pinned.
+SEED = int(os.environ.get("SEED", 42))
+random.seed(SEED)
+Faker.seed(SEED)
 fake = Faker()
+
+# The data window ends here. It defaults to now, so the demo is never stale -
+# but then the same seed still produces different dates tomorrow, because the
+# window moved. Pin DATA_END_DATE to an ISO date to reproduce a dataset exactly.
+_end = os.environ.get("DATA_END_DATE")
+DATA_END = datetime.fromisoformat(_end) if _end else datetime.now()
+YEAR = timedelta(days=365)
 
 def get_db_connection():
     return psycopg2.connect(
@@ -87,15 +101,15 @@ def generate_data(num_customers, num_orders, num_products):
     # --- Customers ---
     customers = []
     for _ in range(num_customers):
-        created_at = fake.date_time_between(start_date='-2y', end_date='-1y')
+        created_at = fake.date_time_between(start_date=DATA_END - 2 * YEAR, end_date=DATA_END - YEAR)
         updated_at = created_at
         
         # Simulate updates for 10% of customers
         if random.random() < 0.1:
-            updated_at = fake.date_time_between(start_date=created_at, end_date='now')
+            updated_at = fake.date_time_between(start_date=created_at, end_date=DATA_END)
 
         customers.append({
-            'id': str(uuid.uuid4()),
+            'id': fake.uuid4(),
             'email': fake.email(),
             'name': fake.name(),
             'country': fake.country(),
@@ -108,15 +122,15 @@ def generate_data(num_customers, num_orders, num_products):
     categories = ['Electronics', 'Clothing', 'Home & Garden', 'Books', 'Toys']
     products = []
     for _ in range(num_products):
-        created_at = fake.date_time_between(start_date='-2y', end_date='-1y')
+        created_at = fake.date_time_between(start_date=DATA_END - 2 * YEAR, end_date=DATA_END - YEAR)
         updated_at = created_at
         
         # Simulate price updates for 20% of products
         if random.random() < 0.2:
-            updated_at = fake.date_time_between(start_date=created_at, end_date='now')
+            updated_at = fake.date_time_between(start_date=created_at, end_date=DATA_END)
 
         products.append({
-            'id': str(uuid.uuid4()),
+            'id': fake.uuid4(),
             'name': fake.catch_phrase(),
             'category': random.choice(categories),
             'price': round(random.uniform(10.0, 1000.0), 2),
@@ -138,15 +152,15 @@ def generate_data(num_customers, num_orders, num_products):
 
     for _ in range(num_orders):
         customer = random.choice(active_customers)
-        order_id = str(uuid.uuid4())
-        created_at = fake.date_time_between(start_date='-1y', end_date='now')
+        order_id = fake.uuid4()
+        created_at = fake.date_time_between(start_date=DATA_END - YEAR, end_date=DATA_END)
         updated_at = created_at
         
         status = random.choice(statuses)
         
         # Simulate order status updates for 30% of orders
         if random.random() < 0.3:
-            updated_at = fake.date_time_between(start_date=created_at, end_date='now')
+            updated_at = fake.date_time_between(start_date=created_at, end_date=DATA_END)
             # If updated, likely moved to a final state
             status = random.choice(['delivered', 'cancelled'])
 
@@ -166,7 +180,7 @@ def generate_data(num_customers, num_orders, num_products):
             order_total += item_total
             
             order_items.append({
-                'id': str(uuid.uuid4()),
+                'id': fake.uuid4(),
                 'order_id': order_id,
                 'product_id': product['id'],
                 'quantity': quantity,
