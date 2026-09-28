@@ -1,6 +1,8 @@
 FROM python:3.11
 
-RUN apt-get update && apt-get install -y git curl wget gettext-base && rm -rf /var/lib/apt/lists/*
+# git for the entrypoint, curl for the CLI installer below, gettext-base for
+# envsubst. wget was here too and nothing ever called it.
+RUN apt-get update && apt-get install -y --no-install-recommends git curl gettext-base && rm -rf /var/lib/apt/lists/*
 
 # Pin the CLI. With no tag the installer takes whatever is newest, so an
 # unpinned build is not reproducible; it fails loudly on an unknown tag.

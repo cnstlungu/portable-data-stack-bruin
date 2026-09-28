@@ -38,6 +38,14 @@ OLAP (Data Warehouse)
 
 1. Rename `.env.example` file to `.env` and set your desired credentials. Remember to never commit files containing credentials or any other sensitive information.
 
+   The `SUPERSET_SECRET_KEY` in `.env.example` is a placeholder that every fork
+   of this repository shares, and Superset signs session cookies with it.
+   Generate your own before the stack is reachable by anyone but you:
+
+   ```bash
+   openssl rand -base64 42
+   ```
+
 2. Rename `shared/db/datamart.duckdb.example` to `shared/db/datamart.duckdb` or init an empty database file there with that name.
 
 3. With **Docker Engine** installed, change directory to the root folder of the project (also the one that contains docker-compose.yml) and run
@@ -51,6 +59,24 @@ OLAP (Data Warehouse)
 ![Superset](resources/dashboard.jpg "Superset")
 
 
+
+### Generated data
+
+The OLTP database is filled by `generator/generate.py` before bruin runs. It is
+seeded, so the same settings produce the same dataset:
+
+| Variable | Default | Effect |
+|---|---|---|
+| `SEED` | `42` | Seeds both `random` and `Faker`, which between them drive every value - including the row ids. |
+| `DATA_END_DATE` | now | Last moment the window reaches. Customers and products are created in the year before it, orders within it. |
+
+`SEED` on its own does not make a run repeatable **across days**, because the
+window ends at the current time and therefore moves. To reproduce a dataset
+exactly, pin both:
+
+```bash
+SEED=42 DATA_END_DATE=2026-09-27 docker compose up --build
+```
 
 ### Demo Credentials
 
