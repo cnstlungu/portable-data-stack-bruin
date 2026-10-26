@@ -1,5 +1,9 @@
-# duckdb must match the version the pipeline image writes with. Superset opens
-# the same warehouse file, and a newer duckdb writes a format an older reader
-# cannot open, so these two move together.
+# Superset only reads the warehouse, and its duckdb must be at least as new as
+# whatever writes it - here, the bruin CLI. A newer duckdb opens every older
+# storage format, but an older one cannot open a newer one: no 1.x reader opens
+# a file 2.0 created. So this can run ahead of the writer, never behind it.
+#
+# Superset 6.1 declares duckdb<2 for its [duckdb] extra. That extra is not
+# installed here, and duckdb-engine itself accepts 2.0.
 duckdb-engine==0.17.0
-duckdb==1.5.6
+duckdb==2.0.0
